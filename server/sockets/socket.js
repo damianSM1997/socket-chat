@@ -26,7 +26,8 @@ io.on('connection', (client) => {
         // dado que se puede ocupar en este caso la funcion
         usuarios.agregarPersona(client.id, data.nombre, data.sala);
 
-        client.broadcast.to(data.sala).emit('listaPersonas', usuarios.getPersonasPorSala(data.sala));
+        client.broadcast.to(data.sala).emit('listaPersona', usuarios.getPersonasPorSala(data.sala));
+        client.broadcast.to(data.sala).emit('crearMensaje', crearMensaje('Administrador', `${data.nombre} se unió`));
         //la linea de abajo es para que todos lo vean pero eso no es lo que 
         // se desea en este caso
         //client.broadcast.emit('listaPersonas', usuarios.getPersonas());
@@ -34,11 +35,13 @@ io.on('connection', (client) => {
 
     });
 
-    client.on('crearMensaje', (data) => {
+    client.on('crearMensaje', (data, callback) => {
         let persona = usuarios.getPersona(client.id);
         //info que el cliente tiene que proporcionar
         let mensaje = crearMensaje(persona.nombre, data.mensaje);
         client.broadcast.to(persona.sala).emit('crearMensaje', mensaje);
+
+        callback(mensaje);
     });
 
 
@@ -47,7 +50,7 @@ io.on('connection', (client) => {
         let personaBrorada = usuarios.borrarPersona(client.id);
 
         client.broadcast.to(personaBrorada.sala).emit('crearMensaje', crearMensaje('Administrador', `${personaBrorada.nombre} salio`));
-        client.broadcast.to(personaBrorada.sala).emit('listaPersonas', usuarios.getPersonasPorSala());
+
 
     });
 
