@@ -6,6 +6,7 @@ var sala = params.get('sala')
 // referencias de jquery
 // la variable busca por el id un elemento que tenva el valor divUsuarios
 var divUsuarios = $('#divUsuarios');
+var divUsuarios2 = $('#divUsuarios2');
 var formEnviar = $('#formEnviar');
 var txtMensaje = $('#txtMensaje');
 var divChatbox = $('#divChatbox');
@@ -31,6 +32,8 @@ function renderizarUsuarios(personas) {
     divUsuarios.html(html);
 
 }
+
+
 
 
 function renderizarMensajes(mensaje, yo) {
@@ -100,6 +103,7 @@ divUsuarios.on('click', 'a', function() {
         console.log(id);
     }
 });
+
 
 formEnviar.on('submit', function(e) {
     e.preventDefault();
